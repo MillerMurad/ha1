@@ -91,19 +91,50 @@ class CalculatorTest {
 
     //TODO hier weitere Tests erstellen
     @Test
-    @DisplayName("sollte eine Zahl korrekt addieren, wenn die andere Zahl Null ist")
-    void testAdditionMitNull() {
+    @DisplayName("should repeat last addition when equals is pressed consecutively")
+    void testRepeatedEqualsForAddition() {
         Calculator calc = new Calculator();
 
-        calc.pressDigitKey(8);
+        calc.pressDigitKey(5);
         calc.pressBinaryOperationKey("+");
-        calc.pressDigitKey(0);
-        calc.pressEqualsKey();
+        calc.pressDigitKey(3);
+        calc.pressEqualsKey(); // ergibt 8
+        calc.pressEqualsKey(); // sollte 8 + 3 wiederholen und 11 ergeben
+        calc.pressEqualsKey(); // sollte erneut 3 addieren und 14 ergeben
 
-        String erwartet = "8";
+        String expected = "14";  // Erwartet: 5 + 3 + 3 + 3 = 14
+        String actual = calc.readScreen();
+
+        assertEquals(expected, actual);
+    }
+    @Test
+    @DisplayName("sollte nur den aktuellen Eintrag löschen beim ersten Drücken der Clear-Taste")
+    void testClearKeySinglePress() {
+        Calculator calc = new Calculator();
+
+        // Eingabe einer Zahl und einer Operation
+        calc.pressDigitKey(9);
+        calc.pressBinaryOperationKey("+");
+        calc.pressDigitKey(1);
+
+        // Erstes Drücken der Clear-Taste
+        calc.pressClearKey();
+
+        String erwartet = "0"; // Der Bildschirm sollte "0" anzeigen
         String aktuell = calc.readScreen();
 
         assertEquals(erwartet, aktuell);
-    }
-}
 
+        // Überprüfen, ob der Operationsmodus und latestValue erhalten geblieben sind
+        // Zum Beispiel sollte das Hinzufügen fortgesetzt werden, wenn eine weitere Zahl eingegeben wird
+        calc.pressDigitKey(2);
+        calc.pressEqualsKey();
+
+        String erwartetNachAddition = "11"; // 9 + 2 = 11
+        String aktuellNachAddition = calc.readScreen();
+
+        assertEquals(erwartetNachAddition, aktuellNachAddition);
+    }
+
+
+}
