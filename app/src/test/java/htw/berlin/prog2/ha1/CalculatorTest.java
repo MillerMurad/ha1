@@ -90,5 +90,20 @@ class CalculatorTest {
 
 
     //TODO hier weitere Tests erstellen
+    @Test
+    @DisplayName("sollte eine Zahl korrekt addieren, wenn die andere Zahl Null ist")
+    void testAdditionMitNull() {
+        Calculator calc = new Calculator();
+
+        calc.pressDigitKey(8);
+        calc.pressBinaryOperationKey("+");
+        calc.pressDigitKey(0);
+        calc.pressEqualsKey();
+
+        String erwartet = "8";
+        String aktuell = calc.readScreen();
+
+        assertEquals(erwartet, aktuell);
+    }
 }
 
