@@ -92,23 +92,34 @@ class CalculatorTest {
     //TODO hier weitere Tests erstellen
 
     @Test
-    @DisplayName("should display a decimal number when dot key is pressed")
-    void testPressDotKey() {
+    @DisplayName("reset all values when pressing clear twice")
+    void testDoubleClearKey() {
         Calculator calc = new Calculator();
 
-        // Gibt die Ziffer "6" ein und drückt die Dezimal-Taste
-        calc.pressDigitKey(6);
-        calc.pressDotKey();
-        // Gibt die Ziffer "4" ein
-        calc.pressDigitKey(4);
+        // Führt eine Berechnung durch
+        calc.pressDigitKey(5);
+        calc.pressBinaryOperationKey("+");
+        calc.pressDigitKey(3);
 
-        // Erwartetes Ergebnis ist "6.4"
-        String expected = "6.4";
+        // Erste Clear: Setzt nur den Bildschirm zurück
+        calc.pressClearKey();
+        // Zweiter Clear: Setzt auch zwischengespeicherte Werte zurück
+        calc.pressClearKey();
+
+        // Gibt "2" ein und drückt "="
+        calc.pressDigitKey(2);
+        calc.pressEqualsKey();
+
+        // Erwartetes Ergebnis ist "2" (zeigt an, dass alles zurückgesetzt wurde)
+        String expected = "2";
         String actual = calc.readScreen();
 
         assertEquals(expected, actual);
-        //grüner Test
     }
+
 }
+
+
+
 
 
